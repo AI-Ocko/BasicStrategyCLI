@@ -3,7 +3,7 @@
 
 int main() {
 
-  int playerTotal, dealerCard;
+  int playerTotal;
   printf("Enter a total: ");
   scanf("%d", &playerTotal);
   printf("%d\n", playerTotal);
