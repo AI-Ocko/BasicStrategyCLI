@@ -6,9 +6,10 @@
 int main() {
   srand(time(NULL));
 
-  int dealerUpcard = (rand() % 9) + 1;
+  int dealerUpCard = (rand() % 9) + 1;
   int playerPair = (rand() % 9) + 1;
   char printPlayerPair;
+  char printDealerUpCard;
   char userAnswer;
   char correctAnswer;
 
@@ -18,6 +19,11 @@ int main() {
   } else {
     printPlayerPair = playerPair;
   }
+  if (dealerUpCard == 1) {
+    printDealerUpCard = 'A';
+  } else {
+    printDealerUpCard = dealerUpCard;
+  }
 
   // Print messages
   if (printPlayerPair == 'A') {
@@ -25,14 +31,18 @@ int main() {
   } else {
     printf("You have a pair of %d's!\n", printPlayerPair);
   }
-  printf("Dealer's up card is %d\n", dealerUpcard);
+  if (printDealerUpCard == 'A') {
+    printf("Dealer's up card is %c\n", printDealerUpCard);
+  } else {
+    printf("Dealer's up card is %d\n", printDealerUpCard);
+  }
 
   // Get user choice
   printf("Do you split? (Y)es or (N)o: ");
   scanf("%c", &userAnswer);
 
   // Check the actual correct answer
-  if (PairSplitting[playerPair][dealerUpcard] == Y) {
+  if (PairSplitting[playerPair - 1][dealerUpCard - 1] == Y) {
     correctAnswer = 'Y';
   } else {
     correctAnswer = 'N';

@@ -13,7 +13,8 @@ typedef enum {
 
 } Action;
 
-// Dealer High Card  2      3      4      5      6      7      8      9     10 A
+// Dealer High Card   A      2      3      4      5      6      7      8      9
+// 10
 
 Action HardTotals[10][10] = {
     /*  8 */ {H, H, H, H, H, H, H, H, H, H},
@@ -38,16 +39,16 @@ Action SoftTotals[8][10] = {
     /* A,9 */ {S, S, S, S, S, S, S, S, S, S}};
 
 Action PairSplitting[10][10] = {
-    /* 2,2 */ {YN, YN, Y, Y, Y, Y, N, N, N, N},
-    /* 3,3 */ {YN, YN, Y, Y, Y, Y, N, N, N, N},
-    /* 4,4 */ {N, N, N, YN, YN, N, N, N, N, N},
-    /* 5,5 */ {N, N, N, N, N, N, N, N, N, N},
-    /* 6,6 */ {YN, Y, Y, Y, Y, N, N, N, N, N},
-    /* 7,7 */ {Y, Y, Y, Y, Y, Y, N, N, N, N},
-    /* 8,8 */ {Y, Y, Y, Y, Y, Y, Y, Y, Y, Y},
-    /* 9,9 */ {Y, Y, Y, Y, Y, N, Y, Y, N, N},
-    /* 10,10 */ {N, N, N, N, N, N, N, N, N, N},
     /* A,A */ {Y, Y, Y, Y, Y, Y, Y, Y, Y, Y},
+    /* 2,2 */ {N, YN, YN, Y, Y, Y, Y, N, N, N},
+    /* 3,3 */ {N, YN, YN, Y, Y, Y, Y, N, N, N},
+    /* 4,4 */ {N, N, N, N, YN, YN, N, N, N, N},
+    /* 5,5 */ {N, N, N, N, N, N, N, N, N, N},
+    /* 6,6 */ {N, YN, Y, Y, Y, Y, N, N, N, N},
+    /* 7,7 */ {N, Y, Y, Y, Y, Y, Y, N, N, N},
+    /* 8,8 */ {Y, Y, Y, Y, Y, Y, Y, Y, Y, Y},
+    /* 9,9 */ {N, Y, Y, Y, Y, Y, N, Y, Y, N},
+    /* 10,10 */ {N, N, N, N, N, N, N, N, N, N},
 };
 
 int surrender[3][10] = {
