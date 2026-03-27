@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Dealer
+// UpCard-----A------2------3------4------5------6------7------8------9-----10
 Action HardTotals[10][10] = {
     /*  8 */ {H, H, H, H, H, H, H, H, H, H},
     /*  9 */ {H, D, D, D, D, H, H, H, H, H},
