@@ -1,20 +1,6 @@
+#include "basicStrategy.h"
 #include <stdio.h>
-
-typedef enum {
-
-  H = 0,
-  S = 1,
-  D = 2,
-  Ds = 3,
-  N = 4,
-  Y = 5,
-  YN = 6,
-  Surr = 7
-
-} Action;
-
-// Dealer High Card   A      2      3      4      5      6      7      8      9
-// 10
+#include <stdlib.h>
 
 Action HardTotals[10][10] = {
     /*  8 */ {H, H, H, H, H, H, H, H, H, H},
@@ -56,3 +42,56 @@ int surrender[3][10] = {
     /* 15 */ {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
     /* 16 */ {0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
 };
+
+void pairSplitting() {
+  // Generate random pair and dealerUpCard
+  int dealerUpCard = (rand() % 9) + 1;
+  int playerPair = (rand() % 9) + 1;
+
+  char printPlayerPair;
+  char printDealerUpCard;
+  char userAnswer;
+  char correctAnswer;
+
+  // typecasting for converting a randomly generated '1' into an 'A'
+  if (playerPair == 1) {
+    printPlayerPair = 'A';
+  } else {
+    printPlayerPair = playerPair;
+  }
+  if (dealerUpCard == 1) {
+    printDealerUpCard = 'A';
+  } else {
+    printDealerUpCard = dealerUpCard;
+  }
+
+  // Print messages
+  if (printPlayerPair == 'A') {
+    printf("You have a pair of %c's!\n", printPlayerPair);
+  } else {
+    printf("You have a pair of %d's!\n", printPlayerPair);
+  }
+  if (printDealerUpCard == 'A') {
+    printf("Dealer's up card is %c\n", printDealerUpCard);
+  } else {
+    printf("Dealer's up card is %d\n", printDealerUpCard);
+  }
+
+  // Get user choice
+  printf("Do you split? (Y)es or (N)o: ");
+  scanf("%c", &userAnswer);
+
+  // Check the actual correct answer
+  if (PairSplitting[playerPair - 1][dealerUpCard - 1] == Y) {
+    correctAnswer = 'Y';
+  } else {
+    correctAnswer = 'N';
+  }
+
+  // Compare
+  if (correctAnswer == userAnswer) {
+    printf("Correct!");
+  } else {
+    printf("Incorrect!");
+  }
+}
