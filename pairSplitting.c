@@ -1,4 +1,5 @@
 #include "basicStrategy.h"
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -79,7 +80,7 @@ void pairSplitting() {
 
   // Get user choice
   printf("Do you split? (Y)es or (N)o: ");
-  scanf("%c", &userAnswer);
+  scanf(" %c", &userAnswer);
 
   // Check the actual correct answer
   if (PairSplitting[playerPair - 1][dealerUpCard - 1] == Y) {
@@ -89,9 +90,19 @@ void pairSplitting() {
   }
 
   // Compare
-  if (correctAnswer == userAnswer) {
-    printf("Correct!");
+  if (correctAnswer == toupper(userAnswer)) {
+    printf("Correct!\n");
   } else {
-    printf("Incorrect!");
+    printf("Incorrect!\n");
+  }
+}
+
+void pairSplittingLoop() {
+  char playAgain = 'Y';
+
+  while (toupper(playAgain) == 'Y') {
+    pairSplitting();
+    printf("Play Again? (Y/N): ");
+    scanf(" %c", &playAgain);
   }
 }

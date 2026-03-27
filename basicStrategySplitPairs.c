@@ -6,7 +6,7 @@
 int main() {
   srand(time(NULL));
 
-  pairSplitting();
+  pairSplittingLoop();
 
   return 0;
 }

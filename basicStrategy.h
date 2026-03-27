@@ -2,6 +2,7 @@
 #define BASICSTRATEGY_H
 
 void pairSplitting();
+void pairSplittingLoop();
 
 typedef enum {
 
