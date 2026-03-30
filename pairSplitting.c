@@ -17,16 +17,6 @@ Action HardTotals[10][10] = {
     /* 16 */ {S, S, S, S, S, H, H, H, H, H},
     /* 17 */ {S, S, S, S, S, S, S, S, S, S}};
 
-Action SoftTotals[8][10] = {
-    /* A,2 */ {H, H, H, D, D, H, H, H, H, H},
-    /* A,3 */ {H, H, H, D, D, H, H, H, H, H},
-    /* A,5 */ {H, H, D, D, D, H, H, H, H, H},
-    /* A,5 */ {H, H, D, D, D, H, H, H, H, H},
-    /* A,6 */ {H, D, D, D, D, H, H, H, H, H},
-    /* A,7 */ {Ds, Ds, Ds, Ds, Ds, S, S, H, H, H},
-    /* A,8 */ {S, S, S, S, Ds, S, S, S, S, S},
-    /* A,9 */ {S, S, S, S, S, S, S, S, S, S}};
-
 Action PairSplitting[10][10] = {
     /* A,A */ {Y, Y, Y, Y, Y, Y, Y, Y, Y, Y},
     /* 2,2 */ {N, YN, YN, Y, Y, Y, Y, N, N, N},
@@ -104,11 +94,4 @@ int pairSplitting() {
   }
 
   return 1;
-}
-
-void pairSplittingLoop() {
-  char playAgain = 'Y';
-
-  while (pairSplitting()) {
-  }
 }
