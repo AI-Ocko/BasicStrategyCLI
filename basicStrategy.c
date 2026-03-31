@@ -12,6 +12,7 @@ int main(void) {
   do {
     printf("Main Menu\n");
     printf("1. To Split or Not to Split\n");
+    printf("2. Are You Soft Right Now Step-Bro?\n");
     printf("0. Exit\n");
     printf("\n");
     printf("\n");
