@@ -5,18 +5,6 @@
 
 // Dealer
 // UpCard-----A------2------3------4------5------6------7------8------9-----10
-Action HardTotals[10][10] = {
-    /*  8 */ {H, H, H, H, H, H, H, H, H, H},
-    /*  9 */ {H, D, D, D, D, H, H, H, H, H},
-    /* 10 */ {D, D, D, D, D, D, D, D, H, H},
-    /* 11 */ {D, D, D, D, D, D, D, D, D, D},
-    /* 12 */ {H, H, S, S, S, H, H, H, H, H},
-    /* 13 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 14 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 15 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 16 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 17 */ {S, S, S, S, S, S, S, S, S, S}};
-
 Action PairSplitting[10][10] = {
     /* A,A */ {Y, Y, Y, Y, Y, Y, Y, Y, Y, Y},
     /* 2,2 */ {N, YN, YN, Y, Y, Y, Y, N, N, N},

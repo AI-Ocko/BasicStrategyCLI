@@ -5,6 +5,8 @@ int pairSplittingTrainer();
 
 int softTotalTrainer();
 
+int hardTotalTrainer();
+
 typedef enum {
 
   H = 0,

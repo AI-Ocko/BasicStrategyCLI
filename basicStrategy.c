@@ -13,6 +13,7 @@ int main(void) {
     printf("Main Menu\n");
     printf("1. To Split or Not to Split\n");
     printf("2. Are You Soft Right Now Step-Bro?\n");
+    printf("3. Nah, I'm Hard AF\n");
     printf("0. Exit\n");
     printf("\n");
     printf("\n");
@@ -28,6 +29,10 @@ int main(void) {
     case '2':
       srand(time(NULL));
       while (softTotalTrainer()) {
+      };
+    case '3':
+      srand(time(NULL));
+      while (hardTotalTrainer()) {
       };
     case '0':
       break;
