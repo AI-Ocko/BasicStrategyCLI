@@ -17,7 +17,7 @@ Action SoftTotals[8][10] = {
 
 int softTotalTrainer() {
   int dealerUpCard = (rand() % 9) + 1;
-  int playerSecondCard = (rand() % 7);
+  int playerSecondCard = rand() % 8;
 
   char printPlayerSecondCard;
   char printDealerUpCard;
