@@ -1,5 +1,4 @@
-#include "basicStrategy.h"
-#include "settings.h"
+#include "../include/basicStrategy.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

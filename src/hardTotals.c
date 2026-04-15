@@ -1,4 +1,4 @@
-#include "basicStrategy.h"
+#include "../include/basicStrategy.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
