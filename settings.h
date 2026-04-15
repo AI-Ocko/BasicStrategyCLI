@@ -18,4 +18,4 @@ int loadSettings(Settings *s);
 void printSettings(const Settings *s);
 void settingsMenu(Settings *s);
 
-#endif SETTINGS_H
+#endif
