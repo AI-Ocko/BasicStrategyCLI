@@ -70,8 +70,11 @@ int pairSplittingTrainer(Score *score, Settings *settings) {
   score->total++;
 
   // Check the actual correct answer
-  if (PairSplitting[playerPair - 1][dealerUpCard - 1] == Y) {
+  Action cell = PairSplitting[playerPair - 1][dealerUpCard - 1];
+  if (cell == Y) {
     correctAnswer = 'Y';
+  } else if (cell == YN) {
+    correctAnswer = (settings->das) ? 'Y' : 'N';
   } else {
     correctAnswer = 'N';
   }
