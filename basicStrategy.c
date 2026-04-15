@@ -1,4 +1,5 @@
 #include "basicStrategy.h"
+#include "settings.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -17,14 +18,20 @@ void runTrainer(int (*trainerFunc)(Score *score)) {
 
 int main(void) {
   char menu_option;
+  Settings settings;
 
-  printf("==============Basic==Strategy==Trainer=============\n");
+  if (!loadSettings(&settings)) {
+    printf("No settings file found, using defaults.\n");
+  }
+
+  printf("\n==Basic==Strategy==Trainer==\n");
 
   do {
-    printf("Main Menu\n");
+    printf("\n--- Main Menu ---\n");
     printf("1. To Split or Not to Split\n");
     printf("2. Are You Soft Right Now Step-Bro?\n");
     printf("3. Nah, I'm Hard AF\n");
+    printf("4. Settings\n");
     printf("0. Exit\n");
     printf("\n");
     printf("\n");
@@ -40,6 +47,9 @@ int main(void) {
       break;
     case '3':
       runTrainer(hardTotalTrainer);
+      break;
+    case '4':
+      settingsMenu(&settings);
       break;
     case '0':
       break;
