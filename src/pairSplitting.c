@@ -18,12 +18,6 @@ Action PairSplitting[10][10] = {
     /* 10,10 */ {N, N, N, N, N, N, N, N, N, N},
 };
 
-int surrender[3][10] = {
-    /* 14 */ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    /* 15 */ {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-    /* 16 */ {0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
-};
-
 int pairSplittingTrainer(Score *score, Settings *settings) {
   // Generate random pair and dealerUpCard
   int dealerUpCard = (rand() % 10) + 1;
