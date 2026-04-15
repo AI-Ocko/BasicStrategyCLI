@@ -1,19 +1,23 @@
 CC = gcc
-CFLAGS = -Iinclude -DPROJECT_ROOT=\"$(shell pwd)\"
+CFLAGS = -Wall -Wextra -g -Iinclude
 SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
+TARGET = $(BINDIR)/basicStrategyTrainer
 
-SRCS = $(SRCDIR)/basicStrategy.c $(SRCDIR)/hardTotals.c $(SRCDIR)/pairSplitting.c $(SRCDIR)/settings.c $(SRCDIR)/softTotals.c
-OBJS = $(OBJDIR)/basicStrategy.o $(OBJDIR)/hardTotals.o $(OBJDIR)/pairSplitting.o $(OBJDIR)/settings.o $(OBJDIR)/softTotals.o
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
-all: $(BINDIR)/basicStrategyTrainer
+all: $(TARGET)
 
-$(BINDIR)/basicStrategyTrainer: $(OBJS)
-	$(CC) $(OBJS) -o $@
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $(TARGET)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJDIR)/*.o $(BINDIR)/*
+	rm -f $(OBJDIR)/*.o $(TARGET)
+
+run: $(TARGET)
+	./$(TARGET)
