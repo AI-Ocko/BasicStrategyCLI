@@ -4,29 +4,30 @@
 #include <stdlib.h>
 
 // Dealer
-// UpCard-----A------2------3------4------5------6------7------8------9-----10
+// UpCard-------------A------2------3------4------5------6------7------8------9-----10
 Action HardTotals_H17[10][10] = {
     /*  8 */ {H, H, H, H, H, H, H, H, H, H},
-    /*  9 */ {H, D, D, D, D, H, H, H, H, H},
-    /* 10 */ {D, D, D, D, D, D, D, D, H, H},
+    /*  9 */ {H, D, D, D, D, D, H, H, H, H},
+    /* 10 */ {H, D, D, D, D, D, D, D, D, H},
     /* 11 */ {D, D, D, D, D, D, D, D, D, D},
-    /* 12 */ {H, H, S, S, S, H, H, H, H, H},
-    /* 13 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 14 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 15 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 16 */ {S, S, S, S, S, H, H, H, H, H},
+    /* 12 */ {H, H, S, S, S, S, H, H, H, H},
+    /* 13 */ {H, S, S, S, S, S, H, H, H, H},
+    /* 14 */ {H, S, S, S, S, S, H, H, H, H},
+    /* 15 */ {H, S, S, S, S, S, H, H, H, H},
+    /* 16 */ {H, S, S, S, S, S, H, H, H, H},
     /* 17 */ {S, S, S, S, S, S, S, S, S, S}};
 
+// UpCard-------------A------2------3------4------5------6------7------8------9-----10
 Action HardTotals_S17[10][10] = {
     /*  8 */ {H, H, H, H, H, H, H, H, H, H},
-    /*  9 */ {H, D, D, D, D, H, H, H, H, H},
-    /* 10 */ {D, D, D, D, D, D, D, D, H, H},
-    /* 11 */ {D, D, D, D, D, D, D, D, D, H},
-    /* 12 */ {H, H, S, S, S, H, H, H, H, H},
-    /* 13 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 14 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 15 */ {S, S, S, S, S, H, H, H, H, H},
-    /* 16 */ {S, S, S, S, S, H, H, H, H, H},
+    /*  9 */ {H, D, D, D, D, D, H, H, H, H},
+    /* 10 */ {H, D, D, D, D, D, D, D, D, H},
+    /* 11 */ {H, D, D, D, D, D, D, D, D, D},
+    /* 12 */ {H, H, S, S, S, S, H, H, H, H},
+    /* 13 */ {H, S, S, S, S, S, H, H, H, H},
+    /* 14 */ {H, S, S, S, S, S, H, H, H, H},
+    /* 15 */ {H, S, S, S, S, S, H, H, H, H},
+    /* 16 */ {H, S, S, S, S, S, H, H, H, H},
     /* 17 */ {S, S, S, S, S, S, S, S, S, S}};
 
 int hardTotalTrainer(Score *score, Settings *settings) {
