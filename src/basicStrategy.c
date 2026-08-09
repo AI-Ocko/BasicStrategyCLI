@@ -96,6 +96,12 @@ int main(void) {
       if (selection == 3) {
         drawSettingsMenu(mainMenuWindow, 0, xMax / 4, ptrSettings);
         settingsMenu(mainMenuWindow, 0, xMax / 4, ptrSettings);
+      } else {
+        WINDOW *trainerWindow = centerWindow(yMax - 4, xMax - 4);
+        Score gameScore;
+        Score *ptrScore = &gameScore;
+        TrainerOptions[selection](trainerWindow, ptrScore, ptrSettings);
+        delwin(trainerWindow);
       }
     }
     drawMainMenu(mainMenuWindow, selection, xMax / 4);
