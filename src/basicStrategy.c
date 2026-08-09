@@ -1,266 +1,107 @@
 #include "../include/basicStrategy.h"
-#include "../include/init_scr.h"
 #include <curses.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
-// Trainer loader:
-// Takes trainer function (pairSplittingTrainer, softTotalTrainer,
-// hardTotalTrainer).
-// Takes pointer to settings struct Runs trainer function
-// with ability to read settings to check for correct answers
-static void Trainer(WINDOW *window,
-                    int (*trainerFunction)(WINDOW *win, Score *score,
-                                           Settings *settings),
-                    Settings *settings) {
-  Score score = {0, 0};
-  while (trainerFunction(window, &score, settings)) {
-    // Print results
-    if (score.total > 0) {
-      mvwprintw(window, SCREEN_LINE_5, SCREEN_MARGIN, "--- Results ---");
-      mvwprintw(window, SCREEN_LINE_6, SCREEN_MARGIN, "Score: %d / %d",
-                score.correct, score.total);
-      mvwprintw(window, SCREEN_LINE_7, SCREEN_MARGIN, "Accuracy: %.1f%%",
-                (float)score.correct / score.total * 100);
-      mvwprintw(window, 19, 20, "Press any key to continue");
-      wgetch(window);
-    }
-  };
+WINDOW *centerWindow(int nlines, int ncols) {
+  int yMax, xMax;
+  getmaxyx(stdscr, yMax, xMax);
+  return newwin(nlines, ncols, (yMax - nlines) / 2, (xMax - ncols) / 2);
 }
 
-// Options for printMenuBar
-typedef enum {
-  HIGHLIGHT_MAIN_MENU = 0,
-  HIGHLIGHT_PAIR_SPLITTING = 1,
-  HIGHLIGHT_SOFT_TOTALS = 2,
-  HIGHTLIGHT_HARD_TOTALS = 3,
-  HIGHLIGHT_SETTINGS = 4
-} MenuHighlight;
+void printCenteredText(WINDOW *window, int row, int windowWidth,
+                       const char *text) {
+  int col = (windowWidth - (int)strlen(text)) / 2;
+  if (col < 0)
+    col = 0;
+  mvwprintw(window, row, col, "%s", text);
+}
 
-// Print Highlighted Toggled Menu
-static void printMenuBar(WINDOW *window, int MenuHighlight,
-                         const char *exitLabel) {
-  static const struct {
-    int x;
-    const char *menuLabel;
-  } MenuLabel[] = {
-      {WIDTH_FROM_TOP_LEFT_MAIN_MENU, "Main Menu"},
-      {WIDTH_FROM_TOP_LEFT_PAIR_SPLITTING, "(1)Pair Splittings"},
-      {WIDTH_FROM_TOP_LEFT_SOFT_TOTALS, "(2)Soft Totals"},
-      {WIDTH_FROM_TOP_LEFT_HARD_TOTALS, "(3)Hard Totals"},
-      {WIDTH_FROM_TOP_LEFT_SETTINGS, "(4)Settings"},
-  };
-  const int numberOfMenuLabels = sizeof(MenuLabel) / sizeof(MenuLabel[0]);
-
-  werase(window);
-  box(window, 0, 0);
-
-  for (int i = 0; i < numberOfMenuLabels; i++) {
-    if (i == MenuHighlight) {
-      wattron(window, A_STANDOUT);
-    }
-    mvwprintw(window, MENU_MARGIN, MenuLabel[i].x, "%s",
-              MenuLabel[i].menuLabel);
-    if (i == MenuHighlight) {
-      wattroff(window, A_STANDOUT);
-    }
-  }
-  mvwprintw(window, MENU_MARGIN, WIDTH_FROM_TOP_LEFT_EXIT, "%s", exitLabel);
-  wrefresh(window);
+static const struct {
+  const char *optionsName;
+} Options[] = {
+    {"Pair Splitting"},
+    {"Soft Totals"},
+    {"Hard Totals"},
+    {"Settings"},
 };
 
-// Read settings.txt file and save it to struct
-static void loadSettings(FILE *FilePointer, WINDOW *window,
-                         Settings *settings) {
-  if (FilePointer != NULL) {
-    settings->doubleAfterSplit = fgetc(FilePointer);
-    settings->h17OrS17 = fgetc(FilePointer);
-  } else {
-    // If no settings are found, proceed with defaults
-    werase(window);
-    mvwprintw(window, SCREEN_MARGIN, SCREEN_LINE_1,
-              "Error accessing settings. Proceeding wtih defaults. Press any "
-              "key to continue...");
-    wgetch(window);
-    FilePointer = fopen("settings.txt", "w");
-    settings->doubleAfterSplit = 'Y';
-    settings->h17OrS17 = 'H';
-    fputc(settings->h17OrS17, FilePointer);
-    fputc(settings->doubleAfterSplit, FilePointer);
-    fclose(FilePointer);
+static const int numberOfOptions = sizeof(Options) / sizeof(Options[0]);
+
+static void drawMainMenu(WINDOW *window, int selection,
+                         int currentWindowWidth) {
+  werase(window);
+  box(window, 0, 0);
+  printCenteredText(window, 0, currentWindowWidth, "Main Menu");
+  for (int i = 0; i < numberOfOptions; i++) {
+    if (i == selection)
+      wattron(window, A_STANDOUT);
+    printCenteredText(window, i * 2 + 6, currentWindowWidth,
+                      Options[i].optionsName);
+    if (i == selection)
+      wattroff(window, A_STANDOUT);
   }
+  wattron(window, A_DIM);
+  printCenteredText(window, numberOfOptions + 14, currentWindowWidth,
+                    "j/k or up/down to move     Enter to select");
+  printCenteredText(window, numberOfOptions + 15, currentWindowWidth,
+                    "q to quit");
+  wattroff(window, A_DIM);
+  wrefresh(window);
 }
 
 int main(void) {
-  char menuOption;
-  char settingsOption;
-
   // Initialize ncurses
-  initscr();            // Start ncurses mode, creates stdscr
-  cbreak();             // Disable line buffering, get input char-by-char
-  noecho();             // don't echo typed keys automatically
-  keypad(stdscr, TRUE); // enable arrow keys, F-keys, etc.
-  curs_set(0);          // hides the terminal cursor
+  initscr();   // Start ncurses mode, creates stdscr
+  cbreak();    // Disable line buffering, get input char-by-char
+  noecho();    // don't echo typed keys automatically
+  curs_set(0); // hides the terminal cursor
+
+  // Initialize Settings
+  Settings gameSettings;
+  Settings *ptrSettings = &gameSettings;
+  loadSettings(ptrSettings);
 
   // Random seed
   srand(time(NULL));
 
-  // Main menu
-  do {
-    int yMax, xMax;
-    getmaxyx(stdscr, yMax, xMax);
+  // Get screen dimensions
+  int xMax, yMax;
+  getmaxyx(stdscr, yMax, xMax);
 
-    // Menu bar area: border(1) + menu row(1) + border(1) = 3 rows, starting at
-    // y=2
-    int menuTop = 2;
-    int menuHeight = 3;
+  // Initialie Main Menu window
+  WINDOW *mainMenuWindow = centerWindow(yMax / 2, xMax / 4);
+  box(mainMenuWindow, 0, 0);
+  int selection = 0, keyPress;
+  drawMainMenu(mainMenuWindow, 0, xMax / 4);
+  keypad(mainMenuWindow, TRUE); // enable arrow keys, F-keys, etc.
 
-    WINDOW *menuWindow = newwin(menuHeight + 2, xMax - 4, menuTop, 2);
-    box(menuWindow, 0, 0);
-
-    printMenuBar(menuWindow, HIGHLIGHT_MAIN_MENU, "(0)Exit");
-
-    // Screen window: starts right after the menu bar (+1 row gap), fills rest
-    // of screen
-    int gap = 1;
-    int screenTop = menuTop + menuHeight + gap;
-    int screenHt = (yMax - 2) - screenTop; // leave 2-row margin at the bottom
-
-    // Initialize window and print main menu screen
-    WINDOW *screenWindow = newwin(screenHt - 2, xMax - 4, screenTop, 2);
-    box(screenWindow, 0, 0);
-
-    mvwprintw(screenWindow, SCREEN_LINE_1, SCREEN_MARGIN,
-              "Welcome to the BlackJack Basic Strategy TUI Trainer!");
-    mvwprintw(
-        screenWindow, SCREEN_LINE_2, SCREEN_MARGIN,
-        "Press the key of the (H)ighlighted character to go to that menu");
-    mvwprintw(screenWindow, SCREEN_LINE_3, SCREEN_MARGIN,
-              "(1)Pair Splitting Trainer");
-    mvwprintw(screenWindow, SCREEN_LINE_4, SCREEN_MARGIN,
-              "(2)Soft Totals Trainer");
-    mvwprintw(screenWindow, SCREEN_LINE_5, SCREEN_MARGIN,
-              "(3)Hard Totals Trainer");
-    mvwprintw(screenWindow, SCREEN_LINE_6, SCREEN_MARGIN, "(4)Settings");
-    mvwprintw(screenWindow, SCREEN_LINE_7, SCREEN_MARGIN, "(0)Exit");
-
-    wrefresh(menuWindow);
-    wrefresh(screenWindow);
-
-    // Open settings and save settings to struct inside main()
-    FILE *settingsFilePointer;
-    Settings settings;
-    Settings *ptrSettings = &settings;
-    settingsFilePointer = fopen("settings.txt", "r");
-    loadSettings(settingsFilePointer, screenWindow, &settings);
-    fclose(settingsFilePointer);
-
-    menuOption = wgetch(screenWindow);
-
-    // Trainer options
-    switch (menuOption) {
-    case '1':
-      printMenuBar(menuWindow, HIGHLIGHT_PAIR_SPLITTING, "(Q)uit");
-      Trainer(screenWindow, pairSplittingTrainer, ptrSettings);
+  while ((keyPress = wgetch(mainMenuWindow)) != 'q') {
+    switch (keyPress) {
+    case 'k':
+    case KEY_UP:
+      if (selection > 0)
+        selection--;
       break;
-    case '2':
-      printMenuBar(menuWindow, HIGHLIGHT_SOFT_TOTALS, "(Q)uit");
-      Trainer(screenWindow, softTotalTrainer, ptrSettings);
+    case 'j':
+    case KEY_DOWN:
+      if (selection < numberOfOptions - 1)
+        selection++;
       break;
-    case '3':
-      printMenuBar(menuWindow, HIGHTLIGHT_HARD_TOTALS, "(Q)uit");
-      Trainer(screenWindow, hardTotalTrainer, ptrSettings);
-      break;
-    case '4':
-      do {
-        // Update Menu Bar
-        printMenuBar(menuWindow, HIGHLIGHT_SETTINGS, "(0)Save and Exit");
-
-        // Wipe screen for settings menu
-        werase(screenWindow);
-        box(screenWindow, 0, 0);
-        wrefresh(screenWindow);
-
-        // Display initial settings
-        if (ptrSettings->doubleAfterSplit == 'Y') {
-          mvwprintw(screenWindow, SCREEN_LINE_1, SCREEN_MARGIN,
-                    "1. Double After Split Enabled? [ Yes ]");
-        } else {
-          mvwprintw(screenWindow, SCREEN_LINE_1, SCREEN_MARGIN,
-                    "1. Double After Split Enabled? [ No  ]");
-        }
-
-        if (ptrSettings->h17OrS17 == 'H') {
-          mvwprintw(screenWindow, SCREEN_LINE_2, SCREEN_MARGIN,
-                    "2. Hit-17 or Stand-17? [  Hit  ]");
-        } else {
-          mvwprintw(screenWindow, SCREEN_LINE_2, SCREEN_MARGIN,
-                    "2. Hit-17 or Stand-17? [ Stand ]");
-        }
-        mvwprintw(screenWindow, SCREEN_LINE_3, SCREEN_MARGIN,
-                  "0. Save and Exit");
-
-        // Toggle settings
-        switch (settingsOption = wgetch(screenWindow)) {
-        case '1':
-          if (ptrSettings->doubleAfterSplit == 'Y') {
-            ptrSettings->doubleAfterSplit = 'N';
-            mvwprintw(screenWindow, SCREEN_LINE_1, SCREEN_MARGIN,
-                      "1. Double After Split Enabled? [ No  ]");
-          } else {
-            ptrSettings->doubleAfterSplit = 'Y';
-            mvwprintw(screenWindow, SCREEN_LINE_1, SCREEN_MARGIN,
-                      "1. Double After Split Enabled? [ Yes ]");
-          }
-          break;
-        case '2':
-          if (ptrSettings->h17OrS17 == 'H') {
-            ptrSettings->h17OrS17 = 'S';
-            mvwprintw(screenWindow, SCREEN_LINE_2, SCREEN_MARGIN,
-                      "2. Hit-17 or Stand-17? [ Stand ]");
-          } else {
-            ptrSettings->h17OrS17 = 'H';
-            mvwprintw(screenWindow, SCREEN_LINE_2, SCREEN_MARGIN,
-                      "2. Hit-17 or Stand-17? [  Hit  ]");
-          }
-          break;
-        case '0':
-          break;
-        default:
-          mvwprintw(screenWindow, SCREEN_LINE_4, 30,
-                    "Please enter a valid option. Press any key to continue.");
-          settingsOption = wgetch(screenWindow);
-          mvwprintw(screenWindow, SCREEN_LINE_4, 30,
-                    "                           ");
-          break;
-        }
-      } while (settingsOption != '0');
-
-      // Repoen settings.txt and save the inputs the user gave
-      settingsFilePointer = fopen("settings.txt", "w");
-      if (settingsFilePointer != NULL) {
-        fputc(ptrSettings->doubleAfterSplit, settingsFilePointer);
-        fputc(ptrSettings->h17OrS17, settingsFilePointer);
-        fclose(settingsFilePointer);
-      } else {
-        printf("Something went wrong opening settings file\n");
-        fclose(settingsFilePointer);
-        break;
+    case '\n':
+    case '\r':
+    case KEY_ENTER:
+      if (selection == 3) {
+        drawSettingsMenu(mainMenuWindow, 0, xMax / 4, ptrSettings);
+        settingsMenu(mainMenuWindow, 0, xMax / 4, ptrSettings);
       }
-      break;
-    case '0':
-      break;
-    default:
-      mvwprintw(screenWindow, SCREEN_LINE_5, 15, "Invalid input");
-      break;
     }
+    drawMainMenu(mainMenuWindow, selection, xMax / 4);
+  }
 
-    // Reset to main menu on next loop
-    delwin(menuWindow);
-    delwin(screenWindow);
-  } while (menuOption != '0');
-
+  delwin(mainMenuWindow);
   endwin();
 
   return 0;
