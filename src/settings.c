@@ -4,9 +4,13 @@
 
 void loadSettings(Settings *settings) {
   FILE *settingsFilePointer = fopen("settings.txt", "r");
-  if (settingsFilePointer == NULL) {
-    fclose(settingsFilePointer);
+  if (settingsFilePointer ==
+      NULL) { /* If settings.txt doesn't exist, write a new one. */
+    settingsFilePointer = fopen("settings.txt", "w");
     return;
+    fputc('Y', settingsFilePointer);
+    fputc('H', settingsFilePointer);
+    fclose(settingsFilePointer);
   } else {
     settings->doubleAfterSplit = fgetc(settingsFilePointer);
     settings->h17OrS17 = fgetc(settingsFilePointer);
