@@ -1,13 +1,17 @@
 #ifndef CARDART_H
 #define CARDART_H
 
-#define RANK_PLACEHOLDER = @
-#define SUIT_PLACEHOLDER = #
+#include <curses.h>
 
-static const char *templateCardArt[] = {
-    "┌──────────┐", "│@ · · · · │", "│ · · · · ·│",
-    "│· · · · · │", "│ · · # · ·│", "│· · · · · │",
-    "│ · · · · ·│", "│· · · · ·@│", "└──────────┘",
-};
+#define CARD_HEIGHT 9
+#define CARD_WIDTH 12
+
+typedef struct {
+  const char *rank;
+  const char *suit;
+} Card;
+
+void drawCardTemplate(WINDOW *window, int y, int x, Card card);
+void drawCardBack(WINDOW *window, int y, int x);
 
 #endif

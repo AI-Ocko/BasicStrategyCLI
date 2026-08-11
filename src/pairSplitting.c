@@ -65,6 +65,7 @@ static void drawTrainerWindow(WINDOW *window, int selection,
     col += (int)strlen(UserAction[i]) +
            textSpacing; /* increment starting column for next loop*/
   }
+
   wattron(window, A_DIM);
   printCenteredText(window, getmaxy(window) - 4, currentWindowWidth,
                     "h/l or left/right to move     Enter to select");
@@ -79,17 +80,17 @@ int pairSplittingTrainer(WINDOW *window, Score *score, Settings *settings) {
   drawTrainerWindow(window, selection, getmaxx(window));
   keypad(window, TRUE);
 
-  for (int i = 0;
-       i < (int)(sizeof(templateCardArt) / sizeof(templateCardArt[0])); i++) {
-    mvwaddstr(window, i + 1, 2, templateCardArt[i]);
+  // Draw Dealer UpCard
+  int dealerUpCard = 1;
+  if (dealerUpCard == 1) {
+    Card dealerUpCard = {
+        "A",
+        "♠",
+    };
+    drawCardTemplate(window, 1, 2, dealerUpCard);
   }
 
-  // draw dealerUpCard
-  // // Generate random pair and dealerUpCard
-  // int dealerUpCard = dealDealerUpCard();
-  // int playerPair = (rand() % 10) + 1;
-  //
-  // draw PlayerPair
+  drawCardBack(window, 1, 15);
 
   while ((keyPress = wgetch(window)) != 'q') {
     switch (keyPress) {
