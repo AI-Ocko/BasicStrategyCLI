@@ -1,4 +1,5 @@
 #include "../include/basicStrategy.h"
+#include "../include/cardArt.h"
 #include "../include/init_scr.h"
 #include <ctype.h>
 #include <curses.h>
@@ -39,6 +40,7 @@ static void drawTrainerWindow(WINDOW *window, int selection,
   werase(window);
   box(window, 0, 0);
   printCenteredText(window, 0, currentWindowWidth, "Pair Splitting Trainer");
+  printCenteredText(window, 28, currentWindowWidth, "Do you split?");
 
   // Get starting column based on (width of window - length of multiple strings)
   // / 2 for centered position
@@ -57,7 +59,7 @@ static void drawTrainerWindow(WINDOW *window, int selection,
   for (int i = 0; i < numberOfUserActions; i++) {
     if (i == selection)
       wattron(window, A_STANDOUT);
-    mvwprintw(window, 20, col, UserAction[i]);
+    mvwprintw(window, getmaxy(window) * 3 / 4, col, UserAction[i]);
     if (i == selection)
       wattroff(window, A_STANDOUT);
     col += (int)strlen(UserAction[i]) +
@@ -76,6 +78,18 @@ int pairSplittingTrainer(WINDOW *window, Score *score, Settings *settings) {
   int selection = 0, keyPress;
   drawTrainerWindow(window, selection, getmaxx(window));
   keypad(window, TRUE);
+
+  for (int i = 0;
+       i < (int)(sizeof(templateCardArt) / sizeof(templateCardArt[0])); i++) {
+    mvwaddstr(window, i + 1, 2, templateCardArt[i]);
+  }
+
+  // draw dealerUpCard
+  // // Generate random pair and dealerUpCard
+  // int dealerUpCard = dealDealerUpCard();
+  // int playerPair = (rand() % 10) + 1;
+  //
+  // draw PlayerPair
 
   while ((keyPress = wgetch(window)) != 'q') {
     switch (keyPress) {
@@ -103,9 +117,6 @@ int pairSplittingTrainer(WINDOW *window, Score *score, Settings *settings) {
   // char userAnswer;
   // char correctAnswer;
   //
-  // // Generate random pair and dealerUpCard
-  // int dealerUpCard = dealDealerUpCard();
-  // int playerPair = (rand() % 10) + 1;
   //
   // // typecasting for converting a randomly generated '1' into an 'A'
   // if (playerPair == 1) {

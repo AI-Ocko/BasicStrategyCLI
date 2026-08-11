@@ -1,6 +1,6 @@
 #include "../include/basicStrategy.h"
 #include <curses.h>
-#include <stdio.h>
+#include <locale.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -22,10 +22,8 @@ void printCenteredText(WINDOW *window, int row, int windowWidth,
 static const struct {
   const char *optionsName;
 } Options[] = {
-    {"Pair Splitting"},
-    {"Soft Totals"},
-    {"Hard Totals"},
-    {"Settings"},
+    {"Pair Splitting"}, {"Soft Totals"}, {"Hard Totals"},
+    {"Full Game"},      {"Settings"},
 };
 
 static const int numberOfOptions = sizeof(Options) / sizeof(Options[0]);
@@ -54,6 +52,7 @@ static void drawMainMenu(WINDOW *window, int selection,
 
 int main(void) {
   // Initialize ncurses
+  setlocale(LC_ALL, "");
   initscr();   // Start ncurses mode, creates stdscr
   cbreak();    // Disable line buffering, get input char-by-char
   noecho();    // don't echo typed keys automatically
@@ -93,7 +92,7 @@ int main(void) {
     case '\n':
     case '\r':
     case KEY_ENTER:
-      if (selection == 3) {
+      if (selection == 4) {
         drawSettingsMenu(mainMenuWindow, 0, xMax / 4, ptrSettings);
         settingsMenu(mainMenuWindow, 0, xMax / 4, ptrSettings);
       } else {

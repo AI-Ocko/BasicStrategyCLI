@@ -6,7 +6,9 @@
 
 int dealDealerUpCard() { return rand() % 10 + 1; }
 
-void printDealerUpCard(WINDOW *window, int dealerUpCard) {
+void printDealerUpCard(
+    WINDOW *window,
+    int dealerUpCard) { /* Probably will convert to drawDealerUpcard */
   if (dealerUpCard == 1) {
     mvwprintw(window, SCREEN_LINE_2, SCREEN_MARGIN, "Dealer's Up Card is A");
     wrefresh(window);

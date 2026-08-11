@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -I$(INC_DIR) -lncurses
+CFLAGS = -Wall -Wextra -I$(INC_DIR) -lncursesw
 
 BIN_DIR = bin
 OBJ_DIR = obj
