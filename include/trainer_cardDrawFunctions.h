@@ -1,5 +1,5 @@
-#ifndef CARDART_H
-#define CARDART_H
+#ifndef TRAINER_CARDDRAWFUNCTIONS_H
+#define TRAINER_CARDDRAWFUNCTIONS_H
 
 #include "basicStrategy.h"
 #include <curses.h>

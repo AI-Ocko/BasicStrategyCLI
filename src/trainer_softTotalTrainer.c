@@ -1,5 +1,5 @@
 #include "../include/basicStrategy.h"
-#include "../include/cardArt.h"
+#include "../include/trainer_cardDrawFunctions.h"
 #include <curses.h>
 #include <stdlib.h>
 #include <string.h>
