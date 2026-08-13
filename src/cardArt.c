@@ -45,6 +45,15 @@ Card generatePlayerCard() {
   return playerCard;
 }
 
+Card generateAceCard() {
+  Card aceCard;
+
+  aceCard.rank = 0;
+  aceCard.suit = rand() % SUIT_COUNT;
+
+  return aceCard;
+}
+
 void drawCardTemplate(WINDOW *window, int y, int x, Card card) {
   for (int i = 0; i < CARD_HEIGHT; i++) {
     mvwaddstr(window, y + i, x, cardTemplateArt[i]);

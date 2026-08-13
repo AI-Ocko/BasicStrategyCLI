@@ -34,5 +34,6 @@ void drawCardBack(WINDOW *window, int y, int x);
 
 Card generateDealerUpCard();
 Card generatePlayerCard();
+Card generateAceCard();
 
 #endif
