@@ -41,7 +41,7 @@ static const int numberOfUserActions =
 Card generatePlayerCardOne() {
   Card playerCardOne;
 
-  playerCardOne.rank = rand() % 9 + 1;
+  playerCardOne.rank = (rand() % 9) + 1;
   playerCardOne.suit = rand() % SUIT_COUNT;
 
   return playerCardOne;
@@ -49,6 +49,7 @@ Card generatePlayerCardOne() {
 Card generatePlayerCardTwo(Card playerCardOne) {
   Card playerCardTwo;
 
+  // Check max card total, make sure it is between 8-17
   do {
     if (playerCardOne.rank == 9) {
       playerCardTwo.rank = rand() % 6 + 1;
@@ -74,7 +75,7 @@ static void drawTrainerWindow(WINDOW *window, int selection,
   box(window, 0, 0);
 
   // Title
-  printCenteredText(window, 0, currentWindowWidth, "Pair Splitting Trainer");
+  printCenteredText(window, 0, currentWindowWidth, "Hard Total Trainer");
 
   // Draw dealer upcard
   drawCardBack(window, 2, ((currentWindowWidth - CARD_WIDTH) / 2) + 4);

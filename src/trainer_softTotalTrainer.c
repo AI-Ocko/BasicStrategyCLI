@@ -44,6 +44,15 @@ Card generateAceCard() {
   return aceCard;
 }
 
+Card generatePlayerSecondCard() {
+  Card playerSecondCard;
+
+  playerSecondCard.rank = rand() % 8 + 1;
+  playerSecondCard.suit = rand() % SUIT_COUNT;
+
+  return playerSecondCard;
+}
+
 static void drawTrainerWindow(WINDOW *window, int selection,
                               int currentWindowWidth, Card dealerUpCard,
                               Card playerCard, Card aceCard) {
@@ -51,7 +60,7 @@ static void drawTrainerWindow(WINDOW *window, int selection,
   box(window, 0, 0);
 
   // Title
-  printCenteredText(window, 0, currentWindowWidth, "Pair Splitting Trainer");
+  printCenteredText(window, 0, currentWindowWidth, "Soft Total Trainer");
 
   // Draw dealer upcard
   drawCardBack(window, 2, ((currentWindowWidth - CARD_WIDTH) / 2) + 4);
@@ -65,6 +74,7 @@ static void drawTrainerWindow(WINDOW *window, int selection,
                    playerCard);
 
   // Prompt
+  mvwprintw(window, 30, currentWindowWidth / 2, "You have %d", playerCard.rank);
   printCenteredText(window, 28, currentWindowWidth, "Hit, Stand, or Double?");
 
   // Print User Actions
@@ -106,8 +116,8 @@ int softTotalTrainer(WINDOW *window, Score *score, Settings *settings) {
   int selection = 0, keyPress;
   // Draw trainer window
   Card dealerUpCard = generateDealerUpCard();
-  Card playerCard = generatePlayerCard();
   Card aceCard = generateAceCard();
+  Card playerCard = generatePlayerSecondCard();
   drawTrainerWindow(window, selection, getmaxx(window), dealerUpCard,
                     playerCard, aceCard);
   keypad(window, TRUE);
@@ -131,8 +141,8 @@ int softTotalTrainer(WINDOW *window, Score *score, Settings *settings) {
 
       Action correctAnswer =
           settings->h17OrS17 == 'H'
-              ? SoftTotalsH17[playerCard.rank][dealerUpCard.rank]
-              : SoftTotalsS17[playerCard.rank][dealerUpCard.rank];
+              ? SoftTotalsH17[playerCard.rank - 1][dealerUpCard.rank]
+              : SoftTotalsS17[playerCard.rank - 1][dealerUpCard.rank];
 
       int correctOption;
       if (correctAnswer == H) {
@@ -157,8 +167,7 @@ int softTotalTrainer(WINDOW *window, Score *score, Settings *settings) {
       }
 
       dealerUpCard = generateDealerUpCard();
-      playerCard = generatePlayerCard();
-      selection = 0;
+      playerCard = generatePlayerSecondCard();
       break;
     }
     }
