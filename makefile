@@ -6,7 +6,7 @@ OBJ_DIR = obj
 SRC_DIR = src
 INC_DIR = include
 TARGET = $(BIN_DIR)/basicStrategyTrainer
-SRCS = src/basicStrategy.c src/pairSplitting.c src/softTotals.c src/hardTotals.c src/trainerHelperFunctions.c src/settings.c src/cardArt.c
+SRCS = src/basicStrategy.c src/pairSplitting.c src/softTotals.c src/hardTotals.c src/settings.c src/cardArt.c
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(TARGET)

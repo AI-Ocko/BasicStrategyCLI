@@ -2,7 +2,6 @@
 #define CARDART_H
 
 #include "basicStrategy.h"
-#include "init_scr.h"
 #include <curses.h>
 
 #define CARD_HEIGHT 9

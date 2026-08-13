@@ -1,6 +1,7 @@
 #include "../include/basicStrategy.h"
 #include "../include/cardArt.h"
 #include <curses.h>
+#include <stdlib.h>
 #include <string.h>
 
 // Dealer
@@ -33,6 +34,15 @@ static const char *softTotalActions[] = {
 
 static const int numberOfUserActions =
     sizeof(softTotalActions) / sizeof(softTotalActions[0]);
+
+Card generateAceCard() {
+  Card aceCard;
+
+  aceCard.rank = 0;
+  aceCard.suit = rand() % SUIT_COUNT;
+
+  return aceCard;
+}
 
 static void drawTrainerWindow(WINDOW *window, int selection,
                               int currentWindowWidth, Card dealerUpCard,
