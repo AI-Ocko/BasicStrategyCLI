@@ -50,6 +50,33 @@ static void drawMainMenu(WINDOW *window, int selection,
   wrefresh(window);
 }
 
+static const char *title[] = {
+
+    "______ _            _      ___            _    _____ _             _      "
+    "           _____ _   _ _____ ",
+    "| ___ \\ |          | |    |_  |          | |  /  ___| |           | |    "
+    "           |_   _| | | |_   _|",
+    "| |_/ / | __ _  ___| | __   | | __ _  ___| | _\\ `--.| |_ _ __ __ _| |_ "
+    "___  __ _ _   _| | | | | | | |  ",
+    "| ___ \\ |/ _` |/ __| |/ /   | |/ _` |/ __| |/ /`--. \\ __| '__/ _` | __/ "
+    "_ \\/ _` | | | | | | | | | | |  ",
+    "| |_/ / | (_| | (__|   </\\__/ / (_| | (__|   </\\__/ / |_| | | (_| | ||  "
+    "__/ (_| | |_| | | | |_| |_| |_ ",
+    "\\____/|_|\\__,_|\\___|_|\\_\\____/ \\__,_|\\___|_|\\_\\____/ \\__|_|  "
+    "\\__,_|\\__\\___|\\__, |\\__, \\_/  \\___/ \\___/ ",
+    "                                                                          "
+    "  __/ | __/ |                ",
+    "                                                                          "
+    " |___/ |___/                 ",
+};
+
+void printTitle(WINDOW *window) {
+  for (int i = 0; i < (int)(sizeof(title) / sizeof(title[0])); i++) {
+    printCenteredText(window, i + 2, getmaxx(window), title[i]);
+  }
+  wrefresh(window);
+}
+
 int main(void) {
   // Initialize ncurses
   setlocale(LC_ALL, "");
@@ -58,10 +85,12 @@ int main(void) {
   noecho();    // don't echo typed keys automatically
   curs_set(0); // hides the terminal cursor
 
-  // Initialize Settings
+  // Initialize Settings and Score
   Settings gameSettings;
   Settings *ptrSettings = &gameSettings;
   loadSettings(ptrSettings);
+  Score gameScore;
+  Score *ptrScore = &gameScore;
 
   // Random seed
   srand(time(NULL));
@@ -69,6 +98,10 @@ int main(void) {
   // Get screen dimensions
   int xMax, yMax;
   getmaxyx(stdscr, yMax, xMax);
+
+  // Initialize Title window
+  WINDOW *titleWindow = centerWindow(yMax, xMax);
+  printTitle(titleWindow);
 
   // Initialie Main Menu window
   WINDOW *mainMenuWindow = centerWindow(yMax / 2, xMax / 4);
@@ -97,12 +130,11 @@ int main(void) {
         settingsMenu(mainMenuWindow, 0, xMax / 4, ptrSettings);
       } else {
         WINDOW *trainerWindow = centerWindow(yMax - 4, xMax - 4);
-        Score gameScore;
-        Score *ptrScore = &gameScore;
         TrainerOptions[selection](trainerWindow, ptrScore, ptrSettings);
         delwin(trainerWindow);
       }
     }
+    printTitle(titleWindow);
     drawMainMenu(mainMenuWindow, selection, xMax / 4);
   }
 
