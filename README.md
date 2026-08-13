@@ -1,6 +1,6 @@
 # Basic Strategy Trainer
 
-![TUI-screenshot](img/Pasted image.png)
+<img width="1019" height="1001" alt="image" src="https://github.com/user-attachments/assets/914bd0c5-543e-4b7a-b2bd-42baa85c8f2a" />
 
 ## What is This?
 
