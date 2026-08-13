@@ -1,6 +1,7 @@
 # Basic Strategy Trainer
 
-<img width="1019" height="1001" alt="image" src="https://github.com/user-attachments/assets/914bd0c5-543e-4b7a-b2bd-42baa85c8f2a" />
+<img width="801" height="971" alt="image" src="https://github.com/user-attachments/assets/c00f81d6-aa96-4ef1-b9da-07a05315bdf5" />
+
 
 ## What is This?
 
