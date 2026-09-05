@@ -142,7 +142,9 @@ int pairSplittingTrainer(WINDOW *window, Score *score, Settings *settings) {
 
       dealerUpCard = generateDealerUpCard();
       playerCard = generatePlayerCard();
-      selection = 0;
+      // I'm not sure whether I want to keep the highlight on the previously
+      // selected option or not
+      // selection = 0;
       break;
     }
     }

@@ -190,7 +190,8 @@ int hardTotalTrainer(WINDOW *window, Score *score, Settings *settings) {
       dealerUpCard = generateDealerUpCard();
       playerCardOne = generatePlayerCardOne();
       playerCardTwo = generatePlayerCardTwo(playerCardOne);
-      selection = 0;
+      // Not sure whether to keep or remove this
+      // selection = 0;
       break;
     }
     }
