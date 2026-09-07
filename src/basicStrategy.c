@@ -138,6 +138,7 @@ int main(void) {
   }
 
   delwin(mainMenuWindow);
+  delwin(titleWindow);
   endwin();
 
   return 0;

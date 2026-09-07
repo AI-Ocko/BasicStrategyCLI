@@ -7,7 +7,6 @@ void loadSettings(Settings *settings) {
   if (settingsFilePointer ==
       NULL) { /* If settings.txt doesn't exist, write a new one. */
     settingsFilePointer = fopen("settings.txt", "w");
-    return;
     fputc('Y', settingsFilePointer);
     fputc('H', settingsFilePointer);
     fclose(settingsFilePointer);
@@ -15,6 +14,9 @@ void loadSettings(Settings *settings) {
     settings->doubleAfterSplit = fgetc(settingsFilePointer);
     settings->h17OrS17 = fgetc(settingsFilePointer);
     fclose(settingsFilePointer);
+
+    // Previous implementation
+
     // WINDOW *testWindow = newwin(10, 10, 10, 10);
     // box(testWindow, 0, 0);
     // mvwprintw(testWindow, 0, 0, "Loaded Settings Successfully!");
